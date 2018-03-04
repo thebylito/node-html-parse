@@ -10,6 +10,8 @@ var bodyParser = require('body-parser');
 /* importar o módulo do express-validator */
 var expressValidator = require('express-validator');
 
+
+
 /* iniciar o objeto do express */
 var app = express();
 
@@ -35,4 +37,5 @@ consign()
 	.into(app);
 
 /* exportar o objeto app */
+
 module.exports = app;
