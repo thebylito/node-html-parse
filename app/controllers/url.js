@@ -1,5 +1,5 @@
 /*Inicia o buscador de mata tags*/
-var MetaInspector = require("node-metainspector");
+var MetaInspector = require("../Sources/node-metainspector");
 module.exports.parse = function(application, req, res) {
   var dadosForm = req.query;
 
@@ -14,10 +14,19 @@ module.exports.parse = function(application, req, res) {
   var client = new MetaInspector(dadosForm.url, { timeout: 5000 });
 
   client.on("fetch", function() {
+    
+    let oldPrice;
+    if(parseFloat(client.price) > parseFloat(client.oldPrice) || !client.oldPrice || parseFloat(client.price) === parseFloat(client.oldPrice) ){
+      oldPrice = false;
+    }else{
+      oldPrice = client.oldPrice;
+    }
     res.send({
       title: client.title,
       image: client.image,
-      description: client.description
+      description: client.description,
+      price: client.price ? client.price : false,
+      oldPrice: oldPrice,
     });
   });
 
