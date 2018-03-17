@@ -297,11 +297,7 @@ MetaInspector.prototype.getMetaDescription = function() {
 };
 
 MetaInspector.prototype.getSecondaryDescription = function() {
-  debug('Parsing page secondary description');
   var _this = this;
-
-  if (!this.description) {
-    var minimumPLength = 120;
 
     this.parsedDocument('p').each(function(i, elem) {
       if (_this.description) {
