@@ -1,19 +1,19 @@
-var util = require("util"),
-  request = require("request"),
-  events = require("events"),
-  cheerio = require("cheerio"),
-  URI = require("uri-js"),
-  _ = require("lodash");
+var util = require('util'),
+  request = require('request'),
+  events = require('events'),
+  cheerio = require('cheerio'),
+  URI = require('uri-js'),
+  _ = require('lodash');
 
 var debug;
 const arrayPrice = [
-	"span[class='regular-price']",
-	"div[class='price-box-avista']",
-	"div[class='new-value']",
+  "span[class='regular-price']",
+  "div[class='price-box-avista']",
+  "div[class='new-value']",
   "strong[class='skuBestPrice']",
   "span[class='real-price']",
-  "p[class=sales-price]",
-  "strong[itemprop=price]",
+  'p[class=sales-price]',
+  'strong[itemprop=price]',
   "span[class='a-size-medium a-color-price inlineBlock-display offer-price a-text-normal price3P']",
   "span[id='priceblock_ourprice']",
   "span[itemprop='lowPrice']",
@@ -41,42 +41,46 @@ const arrayPrice = [
   "div[class='preco-a-vista']",
   "div[id='divPrecoProduto']",
   "h4[class='price item_promo']",
-  "dd[itemprop='price']",
+  "dd[itemprop='price']"
 ];
 const arrayOldPrice = [
-	"div[class='old-value ctrValorDeArea']",
-	"strong[class='skuListPrice']",
-	"del[class=reduce]",
-	"del[class=value]",
-	"span[class='a-color-secondary a-text-strike']",
-	"span[itemprop='highPrice']",
-	"span[class='price-old col-xs-12 col-sm-12 col-md-12']",
-	"span[class='product-price-old']",
-	"div[class='precoDe']",
-	"h3[class='price-original']",
-	"del[class='price reduce']",
-	"span[class='discount-price']",
-	"div[class='cartao-destaque']",
-	"span[class='preco_de']",
-	"span[class='regular-price']",
-	"p[class='product-detail-old-price']",
-	"div[class='col-lg-6 col-md-6 col-sm-6 col-xs-12 preco-produto ']",
-	"strike[class='preco-antigo']",
-	"h5[class='price price_old']",
-	"del[class='list-price']",
-	"span[class='a-text-strike']",
+  "div[class='old-value ctrValorDeArea']",
+  "strong[class='skuListPrice']",
+  'del[class=reduce]',
+  'del[class=value]',
+  "span[class='a-color-secondary a-text-strike']",
+  "span[itemprop='highPrice']",
+  "span[class='price-old col-xs-12 col-sm-12 col-md-12']",
+  "span[class='product-price-old']",
+  "div[class='precoDe']",
+  "h3[class='price-original']",
+  "del[class='price reduce']",
+  "span[class='discount-price']",
+  "div[class='cartao-destaque']",
+  "span[class='preco_de']",
+  "span[class='regular-price']",
+  "p[class='product-detail-old-price']",
+  "div[class='col-lg-6 col-md-6 col-sm-6 col-xs-12 preco-produto ']",
+  "strike[class='preco-antigo']",
+  "h5[class='price price_old']",
+  "del[class='list-price']",
+  "span[class='a-text-strike']"
+];
+const arrayImgProduto = [
+  "img[class='swiper-slide-img']",
+  "img[itemprop='image']",
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
   debug = function() {
-    console.error("METAINSPECTOR %s", util.format.apply(util, arguments));
+    console.error('METAINSPECTOR %s', util.format.apply(util, arguments));
   };
 } else {
   debug = function() {};
 }
 
 function withDefaultScheme(url) {
-  return URI.parse(url).scheme ? url : "http://" + url;
+  return URI.parse(url).scheme ? url : 'http://' + url;
 }
 
 var MetaInspector = function(url, options) {
@@ -85,7 +89,7 @@ var MetaInspector = function(url, options) {
   this.parsedUrl = URI.parse(this.url);
   this.scheme = this.parsedUrl.scheme;
   this.host = this.parsedUrl.host;
-  this.rootUrl = this.scheme + "://" + this.host;
+  this.rootUrl = this.scheme + '://' + this.host;
 
   this.options = options || {};
   //default to a sane limit, since for meta-inspector usually 5 redirects should do a job
@@ -101,42 +105,26 @@ var MetaInspector = function(url, options) {
 
 //MetaInspector.prototype = new events.EventEmitter();
 MetaInspector.prototype.__proto__ = events.EventEmitter.prototype;
-
 module.exports = MetaInspector;
 
-MetaInspector.prototype.getPrice = function() {
-  debug("Parsing page description based on meta elements");
+MetaInspector.prototype.getImgProduto = function() {
+  if (!this.imgProduto && !this.image) {
+    arrayImgProduto.some((i, e) => {
+      console.log(i)
+      var img = this.parsedDocument(i).attr('src');
+      if (img) {
+        console.log(img);
+        if(img.length > 0){
+          this.imgProduto = value[0].trim();
+          return true;
 
-  if (!this.price) {
-    arrayPrice.some((i, e) => {
-      //console.log(i);
-      //console.log(e);
-      var value = this.parsedDocument(i).text();
-      console.log(value);
-      if (value !== undefined && value !== "" && value !== null) {
-		console.log(value);
-        if (parseInt(value) != 1) {
-			console.log(value)
-			//rx = /([0-9]+[,{1}.{1}||,{1}||.{1}][0-9]+)/g;
-			rx = /([[\d]+]?[(.?||,?)]?[[\d]+]?[[(.?||,?)]]?[\d]{2})/g;
-			value = value.match(rx) || false;
-			if(value){
-				this.price = value[0].trim();;
-				return true;
-			}
+        }else{
+          this.imgProduto = value.trim();
+          return true;
         }
+        //this.imgProduto = this.getAbsolutePath(img);
       }
-    });
-  }
-
-  return this;
-};
-MetaInspector.prototype.getOldPrice = function() {
-  debug("Parsing page description based on meta elements");
-
-  if (!this.oldPrice) {
-    arrayOldPrice.some((i, e) => {
-      //console.log(i);
+      /*       //console.log(i);
       //console.log(e);
       value = this.parsedDocument(i).text();
       //console.log(value);
@@ -147,9 +135,63 @@ MetaInspector.prototype.getOldPrice = function() {
 			rx = /([[\d]+]?[(.?||,?)]?[[\d]+]?[[(.?||,?)]]?[\d]{2})/g;
 			value = value.match(rx) || false;
 			if(value){
-				this.oldPrice = value[0].trim();
+				this.imgProduto = value[0].trim();
 				return true;
 			}
+        }
+      } */
+    });
+  }
+
+  return this;
+};
+
+MetaInspector.prototype.getPrice = function() {
+  debug('Parsing page description based on meta elements');
+
+  if (!this.price) {
+    arrayPrice.some((i, e) => {
+      //console.log(i);
+      //console.log(e);
+      var value = this.parsedDocument(i).text();
+      console.log(value);
+      if (value !== undefined && value !== '' && value !== null) {
+        console.log(value);
+        if (parseInt(value) != 1) {
+          console.log(value);
+          //rx = /([0-9]+[,{1}.{1}||,{1}||.{1}][0-9]+)/g;
+          rx = /([[\d]+]?[(.?||,?)]?[[\d]+]?[[(.?||,?)]]?[\d]{2})/g;
+          value = value.match(rx) || false;
+          if (value) {
+            this.price = value[0].trim();
+            return true;
+          }
+        }
+      }
+    });
+  }
+
+  return this;
+};
+MetaInspector.prototype.getOldPrice = function() {
+  debug('Parsing page description based on meta elements');
+
+  if (!this.oldPrice) {
+    arrayOldPrice.some((i, e) => {
+      //console.log(i);
+      //console.log(e);
+      value = this.parsedDocument(i).text();
+      //console.log(value);
+      if (value !== undefined && value !== '' && value !== null) {
+        if (parseInt(value) != 1) {
+          //console.log(value)
+          //rx = /([0-9]+[,{1}.{1}||,{1}||.{1}][0-9]+)/g;
+          rx = /([[\d]+]?[(.?||,?)]?[[\d]+]?[[(.?||,?)]]?[\d]{2})/g;
+          value = value.match(rx) || false;
+          if (value) {
+            this.oldPrice = value[0].trim();
+            return true;
+          }
         }
       }
     });
@@ -159,21 +201,21 @@ MetaInspector.prototype.getOldPrice = function() {
 };
 
 MetaInspector.prototype.getTitle = function() {
-  debug("Parsing page title");
+  debug('Parsing page title');
 
   if (!this.title) {
-    this.title = this.parsedDocument("head > title").text();
+    this.title = this.parsedDocument('head > title').text();
   }
 
   return this;
 };
 
 MetaInspector.prototype.getOgTitle = function() {
-  debug("Parsing page Open Graph title");
+  debug('Parsing page Open Graph title');
 
   if (!this.ogTitle) {
     this.ogTitle = this.parsedDocument("meta[property='og:title']").attr(
-      "content"
+      'content'
     );
   }
 
@@ -181,12 +223,12 @@ MetaInspector.prototype.getOgTitle = function() {
 };
 
 MetaInspector.prototype.getOgDescription = function() {
-  debug("Parsing page Open Graph description");
+  debug('Parsing page Open Graph description');
 
   if (this.ogDescription === undefined) {
     this.ogDescription = this.parsedDocument(
       "meta[property='og:description']"
-    ).attr("content");
+    ).attr('content');
   }
 
   return this;
@@ -197,7 +239,7 @@ MetaInspector.prototype.getOgType = function() {
 
   if (this.ogType === undefined) {
     this.ogType = this.parsedDocument("meta[property='og:type']").attr(
-      "content"
+      'content'
     );
   }
 
@@ -210,7 +252,7 @@ MetaInspector.prototype.getOgUpdatedTime = function() {
   if (this.ogUpdatedTime === undefined) {
     this.ogUpdatedTime = this.parsedDocument(
       "meta[property='og:updated_time']"
-    ).attr("content");
+    ).attr('content');
 
     return this;
   }
@@ -221,7 +263,7 @@ MetaInspector.prototype.getOgLocale = function() {
 
   if (this.ogLocale === undefined) {
     this.ogLocale = this.parsedDocument("meta[property='og:locale']").attr(
-      "content"
+      'content'
     );
   }
 
@@ -229,13 +271,13 @@ MetaInspector.prototype.getOgLocale = function() {
 };
 
 MetaInspector.prototype.getLinks = function() {
-  debug("Parsing page links");
+  debug('Parsing page links');
 
   var _this = this;
 
   if (!this.links) {
-    this.links = this.parsedDocument("a").map(function(i, elem) {
-      return _this.parsedDocument(this).attr("href");
+    this.links = this.parsedDocument('a').map(function(i, elem) {
+      return _this.parsedDocument(this).attr('href');
     });
   }
 
@@ -243,11 +285,11 @@ MetaInspector.prototype.getLinks = function() {
 };
 
 MetaInspector.prototype.getMetaDescription = function() {
-  debug("Parsing page description based on meta elements");
+  debug('Parsing page description based on meta elements');
 
   if (!this.description) {
     this.description = this.parsedDocument("meta[name='description']").attr(
-      "content"
+      'content'
     );
   }
 
@@ -255,13 +297,13 @@ MetaInspector.prototype.getMetaDescription = function() {
 };
 
 MetaInspector.prototype.getSecondaryDescription = function() {
-  debug("Parsing page secondary description");
+  debug('Parsing page secondary description');
   var _this = this;
 
   if (!this.description) {
     var minimumPLength = 120;
 
-    this.parsedDocument("p").each(function(i, elem) {
+    this.parsedDocument('p').each(function(i, elem) {
       if (_this.description) {
         return;
       }
@@ -280,7 +322,7 @@ MetaInspector.prototype.getSecondaryDescription = function() {
 
 MetaInspector.prototype.getDescription = function() {
   debug(
-    "Parsing page description based on meta description or secondary description"
+    'Parsing page description based on meta description or secondary description'
   );
   this.getMetaDescription() && this.getSecondaryDescription();
 
@@ -288,15 +330,15 @@ MetaInspector.prototype.getDescription = function() {
 };
 
 MetaInspector.prototype.getKeywords = function() {
-  debug("Parsing page keywords from apropriate metatag");
+  debug('Parsing page keywords from apropriate metatag');
 
   if (!this.keywords) {
     var keywordsString = this.parsedDocument("meta[name='keywords']").attr(
-      "content"
+      'content'
     );
 
     if (keywordsString) {
-      this.keywords = keywordsString.split(",");
+      this.keywords = keywordsString.split(',');
     } else {
       this.keywords = [];
     }
@@ -306,30 +348,30 @@ MetaInspector.prototype.getKeywords = function() {
 };
 
 MetaInspector.prototype.getAuthor = function() {
-  debug("Parsing page author from apropriate metatag");
+  debug('Parsing page author from apropriate metatag');
 
   if (!this.author) {
-    this.author = this.parsedDocument("meta[name='author']").attr("content");
+    this.author = this.parsedDocument("meta[name='author']").attr('content');
   }
 
   return this;
 };
 
 MetaInspector.prototype.getCharset = function() {
-  debug("Parsing page charset from apropriate metatag");
+  debug('Parsing page charset from apropriate metatag');
 
   if (!this.charset) {
-    this.charset = this.parsedDocument("meta[charset]").attr("charset");
+    this.charset = this.parsedDocument('meta[charset]').attr('charset');
   }
 
   return this;
 };
 
 MetaInspector.prototype.getImage = function() {
-  debug("Parsing page image based on the Open Graph image");
+  debug('Parsing page image based on the Open Graph image');
 
   if (!this.image) {
-    var img = this.parsedDocument("meta[property='og:image']").attr("content");
+    var img = this.parsedDocument("meta[property='og:image']").attr('content');
     if (img) {
       this.image = this.getAbsolutePath(img);
     }
@@ -339,12 +381,12 @@ MetaInspector.prototype.getImage = function() {
 };
 
 MetaInspector.prototype.getImages = function() {
-  debug("Parsing page body images");
+  debug('Parsing page body images');
   var _this = this;
 
   if (this.images === undefined) {
-    this.images = this.parsedDocument("img").map(function(i, elem) {
-      var src = _this.parsedDocument(this).attr("src");
+    this.images = this.parsedDocument('img').map(function(i, elem) {
+      var src = _this.parsedDocument(this).attr('src');
       return _this.getAbsolutePath(src);
     });
   }
@@ -353,10 +395,10 @@ MetaInspector.prototype.getImages = function() {
 };
 
 MetaInspector.prototype.getFeeds = function() {
-  debug("Parsing page feeds based on rss or atom feeds");
+  debug('Parsing page feeds based on rss or atom feeds');
 
   if (!this.feeds) {
-    this.feeds = this.parseFeeds("rss") || this.parseFeeds("atom");
+    this.feeds = this.parseFeeds('rss') || this.parseFeeds('atom');
   }
 
   return this;
@@ -367,7 +409,7 @@ MetaInspector.prototype.parseFeeds = function(format) {
   var feeds = this.parsedDocument(
     "link[type='application/" + format + "+xml']"
   ).map(function(i, elem) {
-    return _this.parsedDocument(this).attr("href");
+    return _this.parsedDocument(this).attr('href');
   });
 
   return feeds;
@@ -390,7 +432,8 @@ MetaInspector.prototype.initAllProperties = function() {
     .getOgUpdatedTime()
     .getOgLocale()
     .getPrice()
-    .getOldPrice();
+    .getOldPrice()
+    .getImgProduto();
 };
 
 MetaInspector.prototype.getAbsolutePath = function(href) {
@@ -398,7 +441,7 @@ MetaInspector.prototype.getAbsolutePath = function(href) {
     return href;
   }
   if (!/^\//.test(href)) {
-    href = "/" + href;
+    href = '/' + href;
   }
   return this.rootUrl + href;
 };
@@ -416,20 +459,20 @@ MetaInspector.prototype.fetch = function() {
 
         _this.initAllProperties();
 
-        _this.emit("fetch");
+        _this.emit('fetch');
       } else {
-        _this.emit("error", error);
+        _this.emit('error', error);
       }
     }
   );
 
   if (_this.options.limit) {
     _this.__stoppedAtLimit = false;
-    r.on("data", function(chunk) {
+    r.on('data', function(chunk) {
       totalChunks += chunk.length;
       if (totalChunks > _this.options.limit) {
         if (!_this.__stoppedAtLimit) {
-          _this.emit("limit");
+          _this.emit('limit');
           _this.__stoppedAtLimit = true;
         }
         r.abort();
