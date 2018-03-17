@@ -311,10 +311,8 @@ MetaInspector.prototype.getSecondaryDescription = function() {
         _this.description = text;
       }
     });
+    return this;
   }
-
-  return this;
-};
 
 MetaInspector.prototype.getDescription = function() {
   debug(
