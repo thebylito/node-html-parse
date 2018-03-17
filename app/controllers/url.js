@@ -50,7 +50,7 @@ module.exports.parse = function(application, req, res) {
     dominioNome = dadosForm.url.match(
       /^[https?\:\/\/]?([^\/:?#]+)(?:[\/:?#]|$)/i
     );
-    image = '//via.placeholder.com/500x500/?text=' + dominioNome[1];
+    image = '//via.placeholder.com/500x500/?text=Erro';
     res.send({
       title: 'O site buscado não retornou qualquer resposta',
       image,
