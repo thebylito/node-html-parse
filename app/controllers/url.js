@@ -26,14 +26,16 @@ module.exports.parse = function(application, req, res) {
     }
     let image;
 
-     if(client.image){
-       image = client.image
-     }else if(client.imgProduto){
-
-       image = client.imgProduto.replace(/(http(s?)):\/\//g, '');
-      }else{
-        image = '//via.placeholder.com/500x500/?text=Sem%20imagem'
-      }
+    if (client.image) {
+      image = client.image;
+    } else if (client.imgProduto) {
+      image = client.imgProduto.replace(/(http(s?)):\/\//g, '');
+    } else {
+      dominioNome = dadosForm.url.match(
+        /^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i
+      );
+      image = '//via.placeholder.com/500x500/?text='+dominioNome;
+    }
 
     res.send({
       title: client.title,
