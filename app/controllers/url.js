@@ -11,7 +11,7 @@ module.exports.parse = function(application, req, res) {
     res.send({ validacao: erros, dadosForm: dadosForm });
     return;
   }
-  var client = new MetaInspector(dadosForm.url, { timeout: 5000 });
+  var client = new MetaInspector(dadosForm.url, { timeout: 10000 });
 
   client.on('fetch', function() {
     let oldPrice;
@@ -34,7 +34,7 @@ module.exports.parse = function(application, req, res) {
       dominioNome = dadosForm.url.match(
         /^[https?\:\/\/]?([^\/:?#]+)(?:[\/:?#]|$)/i
       );
-      image = '//via.placeholder.com/500x500/?text='+dominioNome[1];
+      image = '//via.placeholder.com/500x500/?text=' + dominioNome[1];
     }
 
     res.send({
@@ -46,8 +46,14 @@ module.exports.parse = function(application, req, res) {
     });
   });
 
-  client.on('error', function(err) {
-    console.log(err);
+  client.on('error', (err) => {
+    res.send({
+      title: 'O site buscado não retornou qualquer resposta',
+      image,
+      description: 'O site buscado não retornou qualquer resposta',
+      price: '0,00',
+      oldPrice: '0,00'
+    });
   });
 
   client.fetch();
