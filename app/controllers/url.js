@@ -24,15 +24,23 @@ module.exports.parse = function(application, req, res) {
     } else {
       oldPrice = client.oldPrice;
     }
+    let image;
+
+     if(client.image){
+       image = client.image
+     }else if(client.imgProduto){
+
+       image = client.imgProduto.replace(/(http(s?)):\/\//g, '');
+      }else{
+        image = '//via.placeholder.com/500x500/?text=Sem%20imagem'
+      }
+
     res.send({
       title: client.title,
-      image: client.image
-        ? client.image
-        : client.imgProduto.replace(/(http(s?)):\/\//g, ''),
+      image,
       description: client.description,
       price: client.price ? client.price : false,
-      oldPrice: oldPrice,
-      imgProduto: client.imgProduto.replace(/(http(s?)):\/\//g, '')
+      oldPrice: oldPrice
     });
   });
 
