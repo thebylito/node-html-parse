@@ -32,7 +32,7 @@ module.exports.parse = function(application, req, res) {
       oldPrice: oldPrice,
       imgProduto: client.imgProduto.replace(
         /(http(s?)):\/\//g,
-        '//'
+        ''
       )
     });
   });
