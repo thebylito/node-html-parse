@@ -1,9 +1,9 @@
 /*Inicia o buscador de mata tags*/
-var MetaInspector = require("../Sources/node-metainspector");
+var MetaInspector = require('../Sources/node-metainspector');
 module.exports.parse = function(application, req, res) {
   var dadosForm = req.query;
 
-  req.assert("url", "Casa não pode ser vazio").notEmpty();
+  req.assert('url', 'Casa não pode ser vazio').notEmpty();
 
   var erros = req.validationErrors();
 
@@ -13,12 +13,15 @@ module.exports.parse = function(application, req, res) {
   }
   var client = new MetaInspector(dadosForm.url, { timeout: 5000 });
 
-  client.on("fetch", function() {
-    
+  client.on('fetch', function() {
     let oldPrice;
-    if(parseFloat(client.price) > parseFloat(client.oldPrice) || !client.oldPrice || parseFloat(client.price) === parseFloat(client.oldPrice) ){
+    if (
+      parseFloat(client.price) > parseFloat(client.oldPrice) ||
+      !client.oldPrice ||
+      parseFloat(client.price) === parseFloat(client.oldPrice)
+    ) {
       oldPrice = false;
-    }else{
+    } else {
       oldPrice = client.oldPrice;
     }
     res.send({
@@ -27,11 +30,14 @@ module.exports.parse = function(application, req, res) {
       description: client.description,
       price: client.price ? client.price : false,
       oldPrice: oldPrice,
-      imgProduto: client.imgProduto,
+      imgProduto: client.imgProduto.replace(
+        /(http(s?)):\/\/(mobile.|m.)?/g,
+        'www.'
+      )
     });
   });
 
-  client.on("error", function(err) {
+  client.on('error', function(err) {
     console.log(err);
   });
 
