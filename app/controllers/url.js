@@ -47,6 +47,10 @@ module.exports.parse = function(application, req, res) {
   });
 
   client.on('error', (err) => {
+    dominioNome = dadosForm.url.match(
+      /^[https?\:\/\/]?([^\/:?#]+)(?:[\/:?#]|$)/i
+    );
+    image = '//via.placeholder.com/500x500/?text=' + dominioNome[1];
     res.send({
       title: 'O site buscado não retornou qualquer resposta',
       image,
