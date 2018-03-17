@@ -26,14 +26,13 @@ module.exports.parse = function(application, req, res) {
     }
     res.send({
       title: client.title,
-      image: client.image,
+      image: client.image
+        ? client.image
+        : client.imgProduto.replace(/(http(s?)):\/\//g, ''),
       description: client.description,
       price: client.price ? client.price : false,
       oldPrice: oldPrice,
-      imgProduto: client.imgProduto.replace(
-        /(http(s?)):\/\//g,
-        ''
-      )
+      imgProduto: client.imgProduto.replace(/(http(s?)):\/\//g, '')
     });
   });
 
