@@ -1,0 +1,66 @@
+{
+  "_from": "github:thebylito/node-metainspector",
+  "_id": "node-metainspector@1.3.0",
+  "_inBundle": false,
+  "_location": "/node-metainspector",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "github:thebylito/node-metainspector",
+    "rawSpec": "github:thebylito/node-metainspector",
+    "saveSpec": "github:thebylito/node-metainspector",
+    "fetchSpec": null,
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "github:thebylito/node-metainspector#1697f44b97c4473dbb8c0487728a1c6ba72fd5fd",
+  "_spec": "github:thebylito/node-metainspector",
+  "_where": "/Users/thebylito/Documents/node/Lomadee",
+  "author": {
+    "name": "Gabriel Cebrian",
+    "email": "gabceb@gmail.com",
+    "url": "http://about.me/gabceb"
+  },
+  "bugs": {
+    "url": "https://github.com/gabceb/node-metainspector/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "cheerio": "~0.19.0",
+    "lodash": "^4.12.0",
+    "request": "~2.74.0",
+    "uri-js": "~2.1.0"
+  },
+  "deprecated": false,
+  "description": "Npm package for web scraping purposes. You give it an URL, and it lets you easily get its title, links, images, description, keywords, meta tags",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
+    "mocha": "^2.2.5",
+    "node-fakeweb": "0.0.9",
+    "should": "^7.0.1"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "homepage": "http://github.com/gabceb/node-metainspector",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/gabceb/node-metainspector/raw/master/LICENSE"
+    }
+  ],
+  "main": "./index.js",
+  "name": "node-metainspector",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/gabceb/node-metainspector.git"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "version": "1.3.0"
+}
