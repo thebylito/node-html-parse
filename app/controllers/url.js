@@ -32,7 +32,7 @@ module.exports.parse = function(application, req, res) {
       image = client.imgProduto.replace(/(http(s?)):\/\//g, '');
     } else {
       dominioNome = dadosForm.url.match(
-        /^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i
+        /^[https?\:\/\/]?([^\/:?#]+)(?:[\/:?#]|$)/i
       );
       image = '//via.placeholder.com/500x500/?text='+dominioNome[1];
     }
