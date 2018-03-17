@@ -31,8 +31,8 @@ module.exports.parse = function(application, req, res) {
       price: client.price ? client.price : false,
       oldPrice: oldPrice,
       imgProduto: client.imgProduto.replace(
-        /(http(s?)):\/\/(mobile.|m.)?/g,
-        'www.'
+        /(http(s?)):\/\//g,
+        '//'
       )
     });
   });
