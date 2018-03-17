@@ -27,6 +27,7 @@ module.exports.parse = function(application, req, res) {
       description: client.description,
       price: client.price ? client.price : false,
       oldPrice: oldPrice,
+      imgProduto: client.imgProduto,
     });
   });
 

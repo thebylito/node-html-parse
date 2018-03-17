@@ -68,7 +68,7 @@ const arrayOldPrice = [
 ];
 const arrayImgProduto = [
   "img[class='swiper-slide-img']",
-  "img[itemprop='image']",
+  "img[itemprop='image']"
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -110,16 +110,15 @@ module.exports = MetaInspector;
 MetaInspector.prototype.getImgProduto = function() {
   if (!this.imgProduto && !this.image) {
     arrayImgProduto.some((i, e) => {
-      console.log(i)
+      console.log(i);
       var img = this.parsedDocument(i).attr('src');
       if (img) {
         console.log(img);
-        if(img.length > 0){
-          this.imgProduto = value[0].trim();
+        if (Array.isArray(img)) {
+          this.imgProduto = img[0].trim();
           return true;
-
-        }else{
-          this.imgProduto = value.trim();
+        } else {
+          this.imgProduto = img.trim();
           return true;
         }
         //this.imgProduto = this.getAbsolutePath(img);
@@ -299,20 +298,20 @@ MetaInspector.prototype.getMetaDescription = function() {
 MetaInspector.prototype.getSecondaryDescription = function() {
   var _this = this;
 
-    this.parsedDocument('p').each(function(i, elem) {
-      if (_this.description) {
-        return;
-      }
+  this.parsedDocument('p').each(function(i, elem) {
+    if (_this.description) {
+      return;
+    }
 
-      var text = _this.parsedDocument(this).text();
+    var text = _this.parsedDocument(this).text();
 
-      // If we found a paragraph with more than
-      if (text.length >= minimumPLength) {
-        _this.description = text;
-      }
-    });
-    return this;
-  }
+    // If we found a paragraph with more than
+    if (text.length >= minimumPLength) {
+      _this.description = text;
+    }
+  });
+  return this;
+};
 
 MetaInspector.prototype.getDescription = function() {
   debug(
