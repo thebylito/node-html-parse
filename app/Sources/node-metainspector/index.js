@@ -68,7 +68,8 @@ const arrayOldPrice = [
 ];
 const arrayImgProduto = [
   "img[class='swiper-slide-img']",
-  "img[itemprop='image']"
+  "img[itemprop='image']",
+  "img[class='ccc-device-image']"
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
