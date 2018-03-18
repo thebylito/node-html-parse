@@ -69,7 +69,9 @@ const arrayOldPrice = [
 const arrayImgProduto = [
   "img[class='swiper-slide-img']",
   "img[itemprop='image']",
-  "span[class='nav-logo-base nav-sprite']"
+  "span[class='nav-logo-base nav-sprite']",
+  "img[class='rollovercartItemImg no-margin']",
+  "a[id='botaoZoom']",
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -102,6 +104,10 @@ var MetaInspector = function(url, options) {
   this.options.timeout = this.options.timeout || 20000; //Timeout in ms
 
   this.options.strictSSL = !!this.options.strictSSL;
+
+  this.options.headers = this.options.headers || {
+    'User-Agent': 'MetaInspector/1.0'
+  };
 };
 
 //MetaInspector.prototype = new events.EventEmitter();
@@ -113,13 +119,18 @@ MetaInspector.prototype.getImgProduto = function() {
     arrayImgProduto.some((i, e) => {
       console.log(i);
       var img = this.parsedDocument(i).attr('src');
+      if(!img){
+        var img = this.parsedDocument(i).attr('rel');
+
+      }
       if (img) {
         console.log(img);
         if (Array.isArray(img)) {
-          this.imgProduto = img[0].trim();
+          
+          this.imgProduto = this.getAbsolutePath(img[0].trim());
           return true;
         } else {
-          this.imgProduto = img.trim();
+          this.imgProduto = this.getAbsolutePath(img.trim());
           return true;
         }
         //this.imgProduto = this.getAbsolutePath(img);
