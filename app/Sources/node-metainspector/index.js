@@ -7,6 +7,7 @@ var util = require('util'),
 
 var debug;
 const arrayPrice = [
+  "span[class='price-tag']",
   "span[class='regular-price']",
   "div[class='price-box-avista']",
   "div[class='new-value']",
@@ -46,6 +47,7 @@ const arrayPrice = [
   "p[class='special-price']",
 ];
 const arrayOldPrice = [
+  "span[class='clearfix price former-price']",
   "div[class='old-value ctrValorDeArea']",
   "strong[class='skuListPrice']",
   'del[class=reduce]',
@@ -81,6 +83,7 @@ const arrayImgProduto = [
   "a[id='botaoZoom']",
   "img[id='imgProduct']",
   "img[class='gallery-image visible']",
+  "img[id='landingImage']",
   "img[class='x-product__img-thumb js--product-img-thumb is--active']",
 ];
 
