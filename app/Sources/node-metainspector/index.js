@@ -43,6 +43,7 @@ const arrayPrice = [
   "h4[class='price item_promo']",
   "dd[itemprop='price']",
   "span[class='special-price-value']",
+  "p[class='special-price']",
 ];
 const arrayOldPrice = [
   "div[class='old-value ctrValorDeArea']",
@@ -65,9 +66,13 @@ const arrayOldPrice = [
   "strike[class='preco-antigo']",
   "h5[class='price price_old']",
   "del[class='list-price']",
-  "span[class='a-text-strike']"
+  "span[class='a-text-strike']",
+  "p[class='old-price']",
 ];
 const arrayImgProduto = [
+  "a[rel='zoomWidth']",
+  "img[id='image-main']",
+  "img[id='ImagemPrincipalProduto']",
   "link[rel='image_src']",
   "img[class='swiper-slide-img']",
   "img[itemprop='image']",
@@ -76,6 +81,7 @@ const arrayImgProduto = [
   "a[id='botaoZoom']",
   "img[id='imgProduct']",
   "img[class='gallery-image visible']",
+  "img[class='x-product__img-thumb js--product-img-thumb is--active']",
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -126,7 +132,6 @@ MetaInspector.prototype.getImgProduto = function() {
       var img = this.parsedDocument(i).attr('src');
       if(!img){
         var img = this.parsedDocument(i).attr('href');
-
       }
       if(!img){
         var img = this.parsedDocument(i).attr('rel');
