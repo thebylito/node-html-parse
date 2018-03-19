@@ -25,18 +25,16 @@ module.exports.parse = function(application, req, res) {
       oldPrice = client.oldPrice;
     }
     let image;
-
-    if (client.image) {
-      image = client.image;
-    } else if (client.imgProduto) {
+    let dominioNome;
+    if (client.imgProduto) {
       image = client.imgProduto.replace(/(http(s?)):\/\//g, '');
+    } else if (client.image) {
+      image = client.image.replace(/(http(s?)):\/\//g, '');
     } else {
-      dominioNome = dadosForm.url.match(
-        /^[https?\:\/\/]?([^\/:?#]+)(?:[\/:?#]|$)/i
-      );
-      image = '//via.placeholder.com/500x500/?text=' + dominioNome[1];
+      dominioNome = dadosForm.url.split('/');
+      image = '//via.placeholder.com/500x500/?text=' + dominioNome[2];
     }
-
+    console.log(dominioNome)
     res.send({
       title: client.title,
       image,

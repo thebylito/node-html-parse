@@ -41,7 +41,8 @@ const arrayPrice = [
   "div[class='preco-a-vista']",
   "div[id='divPrecoProduto']",
   "h4[class='price item_promo']",
-  "dd[itemprop='price']"
+  "dd[itemprop='price']",
+  "span[class='special-price-value']",
 ];
 const arrayOldPrice = [
   "div[class='old-value ctrValorDeArea']",
@@ -67,11 +68,14 @@ const arrayOldPrice = [
   "span[class='a-text-strike']"
 ];
 const arrayImgProduto = [
+  "link[rel='image_src']",
   "img[class='swiper-slide-img']",
   "img[itemprop='image']",
   "span[class='nav-logo-base nav-sprite']",
   "img[class='rollovercartItemImg no-margin']",
   "a[id='botaoZoom']",
+  "img[id='imgProduct']",
+  "img[class='gallery-image visible']",
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -106,7 +110,8 @@ var MetaInspector = function(url, options) {
   this.options.strictSSL = !!this.options.strictSSL;
 
   this.options.headers = this.options.headers || {
-    'User-Agent': 'MetaInspector/1.0'
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.162 Safari/537.36',
+    
   };
 };
 
@@ -119,6 +124,10 @@ MetaInspector.prototype.getImgProduto = function() {
     arrayImgProduto.some((i, e) => {
       console.log(i);
       var img = this.parsedDocument(i).attr('src');
+      if(!img){
+        var img = this.parsedDocument(i).attr('href');
+
+      }
       if(!img){
         var img = this.parsedDocument(i).attr('rel');
 
