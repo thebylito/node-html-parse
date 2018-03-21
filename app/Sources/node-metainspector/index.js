@@ -46,7 +46,8 @@ const arrayPrice = [
   "dd[itemprop='price']",
   "span[class='special-price-value']",
   "p[class='special-price']",
-  "span[id='Span3']"
+  "span[id='Span3']",
+  "p[class='boleto-price']"
 ];
 const arrayOldPrice = [
   "div[class='fbits-preco']",
@@ -74,6 +75,7 @@ const arrayOldPrice = [
   "p[class='old-price']"
 ];
 const arrayImgProduto = [
+  "img[class='x-product__img-thumb js--product-img-thumb is--active']",
   "img[class='swiper-lazy swiper-img swiper-lazy-loaded']",
   "a[rel='zoomWidth']",
   "img[id='image-main']",
