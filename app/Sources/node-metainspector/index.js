@@ -43,6 +43,7 @@ const arrayPrice = [
   "div[class='preco-a-vista']",
   "div[id='divPrecoProduto']",
   "h4[class='price item_promo']",
+  "h4[class='price']",
   "dd[itemprop='price']",
   "span[class='special-price-value']",
   "p[class='special-price']",
@@ -73,7 +74,8 @@ const arrayOldPrice = [
   "h5[class='price price_old']",
   "del[class='list-price']",
   "span[class='a-text-strike']",
-  "p[class='old-price']"
+  "p[class='old-price']",
+  "h6[class='price price_old']",
 ];
 const arrayImgProduto = [
   "img[class='x-product__img-thumb js--product-img-thumb is--active']",
@@ -95,6 +97,8 @@ const arrayImgProduto = [
   "a[id='cloudZoom']",
   "a[class='a-img a-img--product-carousel current-img']",
   "img[id='imgPrincipalProduto']",
+  "a[class='img-responsive center-block lazyOwl']",
+  "img[id='image-viewer-first']",
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
