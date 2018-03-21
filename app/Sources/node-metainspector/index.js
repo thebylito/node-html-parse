@@ -87,7 +87,8 @@ const arrayImgProduto = [
   "img[class='gallery-image visible']",
   "img[id='landingImage']",
   "img[class='x-product__img-thumb js--product-img-thumb is--active']",
-  "img[name='ProdutoImagemAux']"
+  "img[name='ProdutoImagemAux']",
+  "a[id='cloudZoom']",
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
