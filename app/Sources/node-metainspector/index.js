@@ -7,6 +7,7 @@ var util = require('util'),
 
 var debug;
 const arrayPrice = [
+  "meta[itemprop='price']",
   "span[class='price-tag']",
   "span[class='regular-price']",
   "div[class='price-box-avista']",
@@ -45,6 +46,7 @@ const arrayPrice = [
   "dd[itemprop='price']",
   "span[class='special-price-value']",
   "p[class='special-price']",
+  "span[id='Span3']"
 ];
 const arrayOldPrice = [
   "span[class='clearfix price former-price']",
@@ -69,7 +71,7 @@ const arrayOldPrice = [
   "h5[class='price price_old']",
   "del[class='list-price']",
   "span[class='a-text-strike']",
-  "p[class='old-price']",
+  "p[class='old-price']"
 ];
 const arrayImgProduto = [
   "a[rel='zoomWidth']",
@@ -85,6 +87,7 @@ const arrayImgProduto = [
   "img[class='gallery-image visible']",
   "img[id='landingImage']",
   "img[class='x-product__img-thumb js--product-img-thumb is--active']",
+  "img[name='ProdutoImagemAux']"
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -119,8 +122,8 @@ var MetaInspector = function(url, options) {
   this.options.strictSSL = !!this.options.strictSSL;
 
   this.options.headers = this.options.headers || {
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.162 Safari/537.36',
-    
+    'User-Agent':
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.162 Safari/537.36'
   };
 };
 
@@ -131,19 +134,17 @@ module.exports = MetaInspector;
 MetaInspector.prototype.getImgProduto = function() {
   if (!this.imgProduto && !this.image) {
     arrayImgProduto.some((i, e) => {
-      console.log(i);
+      // console.log(i);
       var img = this.parsedDocument(i).attr('src');
-      if(!img){
+      if (!img) {
         var img = this.parsedDocument(i).attr('href');
       }
-      if(!img){
+      if (!img) {
         var img = this.parsedDocument(i).attr('rel');
-
       }
       if (img) {
-        console.log(img);
+        // console.log(img);
         if (Array.isArray(img)) {
-          
           this.imgProduto = this.getAbsolutePath(img[0].trim());
           return true;
         } else {
@@ -181,14 +182,18 @@ MetaInspector.prototype.getPrice = function() {
     arrayPrice.some((i, e) => {
       //console.log(i);
       //console.log(e);
-      var value = this.parsedDocument(i).text();
-      console.log(value);
+      var value = this.parsedDocument(i).attr('content');
+      console.log('hue:'+ value);
+      if (!value) {
+        value = this.parsedDocument(i).text();
+      }
+      // console.log(value);
       if (value !== undefined && value !== '' && value !== null) {
-        console.log(value);
+        // console.log(value);
         if (parseInt(value) != 1) {
-          console.log(value);
-          //rx = /([0-9]+[,{1}.{1}||,{1}||.{1}][0-9]+)/g;
-          rx = /([[\d]+]?[(.?||,?)]?[[\d]+]?[[(.?||,?)]]?[\d]{2})/g;
+          // console.log(value);
+          rx = /([0-9]+[,{1}.{1}||,{1}||.{1}][0-9]+)/g;
+          //rx = /\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})/g;
           value = value.match(rx) || false;
           if (value) {
             this.price = value[0].trim();
