@@ -49,7 +49,8 @@ const arrayPrice = [
   "p[class='special-price']",
   "span[id='Span3']",
   "p[class='boleto-price']",
-  "meta[property='product:price:amount']"
+  "meta[property='product:price:amount']",
+  "span[class='preco']"
 ];
 const arrayOldPrice = [
   "div[class='fbits-preco']",
@@ -99,6 +100,7 @@ const arrayImgProduto = [
   "img[id='imgPrincipalProduto']",
   "a[class='img-responsive center-block lazyOwl']",
   "img[id='image-viewer-first']",
+  "img[class='img-produto']",
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
