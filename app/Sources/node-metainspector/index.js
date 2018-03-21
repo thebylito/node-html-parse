@@ -89,7 +89,8 @@ const arrayImgProduto = [
   "img[id='landingImage']",
   "img[class='x-product__img-thumb js--product-img-thumb is--active']",
   "img[name='ProdutoImagemAux']",
-  "a[id='cloudZoom']"
+  "a[id='cloudZoom']",
+  "a[class='a-img a-img--product-carousel current-img']",
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -455,6 +456,7 @@ MetaInspector.prototype.initAllProperties = function() {
     .getKeywords()
     .getLinks()
     .getDescription()
+    .getImgProduto()
     .getImage()
     .getImages()
     .getFeeds()
@@ -465,7 +467,6 @@ MetaInspector.prototype.initAllProperties = function() {
     .getOgLocale()
     .getPrice()
     .getOldPrice()
-    .getImgProduto();
 };
 
 MetaInspector.prototype.getAbsolutePath = function(href) {
