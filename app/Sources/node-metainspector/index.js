@@ -47,7 +47,8 @@ const arrayPrice = [
   "span[class='special-price-value']",
   "p[class='special-price']",
   "span[id='Span3']",
-  "p[class='boleto-price']"
+  "p[class='boleto-price']",
+  "meta[property='product:price:amount']"
 ];
 const arrayOldPrice = [
   "div[class='fbits-preco']",
@@ -92,7 +93,7 @@ const arrayImgProduto = [
   "img[class='x-product__img-thumb js--product-img-thumb is--active']",
   "img[name='ProdutoImagemAux']",
   "a[id='cloudZoom']",
-  "a[class='a-img a-img--product-carousel current-img']",
+  "a[class='a-img a-img--product-carousel current-img']"
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -152,11 +153,11 @@ MetaInspector.prototype.getImgProduto = function() {
         // console.log(img);
         if (Array.isArray(img)) {
           this.imgProduto = this.getAbsolutePath(img[0].trim());
-          console.log(this.imgProduto)
+          console.log(this.imgProduto);
           return true;
         } else {
           this.imgProduto = this.getAbsolutePath(img.trim());
-          console.log(this.imgProduto)
+          console.log(this.imgProduto);
           return true;
         }
         //this.imgProduto = this.getAbsolutePath(img);
@@ -408,7 +409,10 @@ MetaInspector.prototype.getImage = function() {
   if (!this.image) {
     var img = this.parsedDocument("meta[property='og:image']").attr('content');
     if (img) {
-      this.image = this.getAbsolutePath(img).replace('www.fastshop.com.br/www.fastshop.com.br','');
+      this.image = this.getAbsolutePath(img).replace(
+        'www.fastshop.com.br/www.fastshop.com.br',
+        ''
+      );
     }
   }
 
@@ -468,7 +472,7 @@ MetaInspector.prototype.initAllProperties = function() {
     .getOgUpdatedTime()
     .getOgLocale()
     .getPrice()
-    .getOldPrice()
+    .getOldPrice();
 };
 
 MetaInspector.prototype.getAbsolutePath = function(href) {
