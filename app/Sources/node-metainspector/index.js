@@ -93,7 +93,8 @@ const arrayImgProduto = [
   "img[class='x-product__img-thumb js--product-img-thumb is--active']",
   "img[name='ProdutoImagemAux']",
   "a[id='cloudZoom']",
-  "a[class='a-img a-img--product-carousel current-img']"
+  "a[class='a-img a-img--product-carousel current-img']",
+  "img[id='imgPrincipalProduto']",
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
