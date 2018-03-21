@@ -49,7 +49,7 @@ const arrayPrice = [
   "span[id='Span3']"
 ];
 const arrayOldPrice = [
-  "span[class='clearfix price former-price']",
+  "div[class='fbits-preco']",
   "div[class='old-value ctrValorDeArea']",
   "strong[class='skuListPrice']",
   'del[class=reduce]',
@@ -74,6 +74,7 @@ const arrayOldPrice = [
   "p[class='old-price']"
 ];
 const arrayImgProduto = [
+  "img[class='swiper-lazy swiper-img swiper-lazy-loaded']",
   "a[rel='zoomWidth']",
   "img[id='image-main']",
   "img[id='ImagemPrincipalProduto']",
@@ -88,7 +89,7 @@ const arrayImgProduto = [
   "img[id='landingImage']",
   "img[class='x-product__img-thumb js--product-img-thumb is--active']",
   "img[name='ProdutoImagemAux']",
-  "a[id='cloudZoom']",
+  "a[id='cloudZoom']"
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -144,12 +145,15 @@ MetaInspector.prototype.getImgProduto = function() {
         var img = this.parsedDocument(i).attr('rel');
       }
       if (img) {
+        img = img;
         // console.log(img);
         if (Array.isArray(img)) {
           this.imgProduto = this.getAbsolutePath(img[0].trim());
+          console.log(this.imgProduto)
           return true;
         } else {
           this.imgProduto = this.getAbsolutePath(img.trim());
+          console.log(this.imgProduto)
           return true;
         }
         //this.imgProduto = this.getAbsolutePath(img);
@@ -184,7 +188,7 @@ MetaInspector.prototype.getPrice = function() {
       //console.log(i);
       //console.log(e);
       var value = this.parsedDocument(i).attr('content');
-      console.log('hue:'+ value);
+      console.log('hue:' + value);
       if (!value) {
         value = this.parsedDocument(i).text();
       }
@@ -401,7 +405,7 @@ MetaInspector.prototype.getImage = function() {
   if (!this.image) {
     var img = this.parsedDocument("meta[property='og:image']").attr('content');
     if (img) {
-      this.image = this.getAbsolutePath(img);
+      this.image = this.getAbsolutePath(img).replace('www.fastshop.com.br/www.fastshop.com.br','');
     }
   }
 
