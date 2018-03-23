@@ -106,15 +106,21 @@ const arrayImgProduto = [
 const arrayProdArray = [
   {
     site: 'www.amissima.com.br',
-    local: 4,
+    local: 3,
     take: [{ title: 'RKProductName' }, { price: 'RKProductPrice' }],
     regex: /({(.*?}))/g
   },
   {
     site: 'loja.electrolux.com.br',
-    local: 25,
+    local: 24,
     take: [{ image: 'image' }],
     regex: /\[{"sku".*}]/g
+  },
+  {
+    site: 'www.fastshop.com.br',
+    local: 70,
+    take: [{ price: 'productSalePrice' }],
+    regex: /(\[{.*])/gs
   }
 ];
 
@@ -154,7 +160,28 @@ var MetaInspector = function(url, options) {
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.162 Safari/537.36'
   };
 };
-
+function JSONize(str) {
+  return (
+    str
+      // wrap keys without quote with valid double quote
+     /*  .replace(/([\$\w]+)\s*:/g, function(_, $1) {
+        return '"' + $1 + '":';
+      }) */
+      // replacing single quote wrapped ones to double quote
+      .replace(/'([^']+)'/g, function(_, $1) {
+        return '"' + $1 + '"';
+      })
+      //.replace(/[^\x20-\x7E]/gmi, "")
+      //.replace(/(\r\n|\n|\r)/gm,"")
+      //.replace(/\s+/g," ")
+      .replace(/[a-zA-z]+[(]?[a-zA-Z]+\([0-9]\)[)]?/g,'""')
+      .replace(/[a-zA-z]+\("[a-z]+"\)/g,'""')
+      .replace(/'"/g,'""')
+      .replace(/"[a-z]+'/g,'""')
+      .replace(/\s[a-z0-9]",/g,'')
+      .trim()
+  );
+}
 MetaInspector.prototype.getArray = function() {
   if (!this.arrayProd) {
     const [proto, pro, url] = this.url.split('/');
@@ -162,12 +189,17 @@ MetaInspector.prototype.getArray = function() {
     if (siteToParse) {
       const { site, local, take, regex } = siteToParse;
       var value = this.parsedDocument('script').map((i, elem) => {
-        if (i === local - 2) {
+        if (i === local - 1) {
           let data = elem.children[0].data;
+          //console.log(data);
           data = data.match(regex);
           const [array] = data;
-          arrayJson1 = JSON.parse(array);
+          //console.log(JSONize(array));
+          //console.log(JSON.parse(JSONize(array)));
+          //console.log(JSON.stringify(eval('('+array+')')))
+                  arrayJson1 = JSON.parse(JSONize(array));
           arrayJson = arrayJson1.length >= 1 ? arrayJson1[0] : arrayJson1;
+          //console.log(arrayJson.image);
           take.map((val, i) => {
             for (var name in val) {
               var value = val[name];
