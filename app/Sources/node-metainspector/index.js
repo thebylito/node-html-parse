@@ -160,18 +160,14 @@ MetaInspector.prototype.getArray = function() {
     const [proto, pro, url] = this.url.split('/');
     let siteToParse = arrayProdArray.find((item) => item.site === url);
     if (siteToParse) {
-      console.log(siteToParse);
-
       const { site, local, take, regex } = siteToParse;
       var value = this.parsedDocument('script').map((i, elem) => {
         if (i === local - 2) {
           let data = elem.children[0].data;
-          //console.log(data)
           data = data.match(regex);
           const [array] = data;
-
           arrayJason = JSON.parse(array);
-          let retorno;
+
           take.map((val, i) => {
             for (var name in val) {
               var value = val[name];
