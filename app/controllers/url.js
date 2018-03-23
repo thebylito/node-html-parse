@@ -34,13 +34,14 @@ module.exports.parse = function(application, req, res) {
       dominioNome = dadosForm.url.split('/');
       image = '//via.placeholder.com/500x500/?text=' + dominioNome[2];
     }
-    console.log(dominioNome)
+    //console.log(dominioNome)
     res.send({
       title: client.title,
       image,
       description: client.description,
       price: client.price ? client.price : false,
-      oldPrice: oldPrice
+      oldPrice: oldPrice,
+      //prodArray: client.prodArray
     });
   });
 

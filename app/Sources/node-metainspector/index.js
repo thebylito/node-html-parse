@@ -76,7 +76,7 @@ const arrayOldPrice = [
   "del[class='list-price']",
   "span[class='a-text-strike']",
   "p[class='old-price']",
-  "h6[class='price price_old']",
+  "h6[class='price price_old']"
 ];
 const arrayImgProduto = [
   "img[class='x-product__img-thumb js--product-img-thumb is--active']",
@@ -100,7 +100,22 @@ const arrayImgProduto = [
   "img[id='imgPrincipalProduto']",
   "a[class='img-responsive center-block lazyOwl']",
   "img[id='image-viewer-first']",
-  "img[class='img-produto']",
+  "img[class='img-produto']"
+];
+
+const arrayProdArray = [
+  {
+    site: 'www.amissima.com.br',
+    local: 4,
+    take: [{ title: 'RKProductName' }, { price: 'RKProductPrice' }],
+    regex: /({(.*?}))/g
+  },
+  {
+    site: 'loja.electrolux.com.br',
+    local: 26,
+    take: [{ image: 'imagem' }, { price: 'RKProductPrice' }],
+    regex: /({(.*?}))/g
+  }
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -140,6 +155,44 @@ var MetaInspector = function(url, options) {
   };
 };
 
+MetaInspector.prototype.getArray = function() {
+  if (!this.arrayProd) {
+    const [proto, pro, url] = this.url.split('/');
+    let siteToParse = arrayProdArray.find((item) => item.site === url);
+    if (siteToParse) {
+      console.log(siteToParse);
+
+      const { site, local, take, regex } = siteToParse;
+      var value = this.parsedDocument('script').map((i, elem) => {
+        if (i === local - 2) {
+          let data = elem.children[0].data;
+          //console.log(data)
+          data = data.match(regex);
+          const [array] = data;
+
+          arrayJason = JSON.parse(array);
+          let retorno;
+          take.map((val, i) => {
+            for (var name in val) {
+              var value = val[name];
+              switch (name) {
+                case 'title':
+                  this.title = arrayJason[val[name]];
+                case 'price':
+                  this.price = arrayJason[val[name]];
+              }
+            }
+          });
+
+          this.arrayProd = JSON.parse(array);
+        }
+      });
+    }
+  }
+
+  return this;
+};
+
 //MetaInspector.prototype = new events.EventEmitter();
 MetaInspector.prototype.__proto__ = events.EventEmitter.prototype;
 module.exports = MetaInspector;
@@ -160,11 +213,11 @@ MetaInspector.prototype.getImgProduto = function() {
         // console.log(img);
         if (Array.isArray(img)) {
           this.imgProduto = this.getAbsolutePath(img[0].trim());
-          console.log(this.imgProduto);
+          //  console.log(this.imgProduto);
           return true;
         } else {
           this.imgProduto = this.getAbsolutePath(img.trim());
-          console.log(this.imgProduto);
+          //  console.log(this.imgProduto);
           return true;
         }
         //this.imgProduto = this.getAbsolutePath(img);
@@ -199,7 +252,7 @@ MetaInspector.prototype.getPrice = function() {
       //console.log(i);
       //console.log(e);
       var value = this.parsedDocument(i).attr('content');
-      console.log('hue:' + value);
+      //  console.log('hue:' + value);
       if (!value) {
         value = this.parsedDocument(i).text();
       }
@@ -479,6 +532,7 @@ MetaInspector.prototype.initAllProperties = function() {
     .getOgUpdatedTime()
     .getOgLocale()
     .getPrice()
+    .getArray()
     .getOldPrice();
 };
 
