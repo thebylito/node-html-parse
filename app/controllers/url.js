@@ -3,7 +3,7 @@ var MetaInspector = require('../Sources/node-metainspector');
 module.exports.parse = function(application, req, res) {
   var dadosForm = req.query;
 
-  req.assert('url', 'Casa não pode ser vazio').notEmpty();
+  req.assert('url', 'url nao pode ser vazio').notEmpty();
 
   var erros = req.validationErrors();
 
