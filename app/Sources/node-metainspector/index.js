@@ -116,12 +116,12 @@ const arrayProdArray = [
     take: [{ image: 'image' }],
     regex: /\[{"sku".*}]/g
   },
-   {
+  {
     site: 'www.fastshop.com.br',
     local: 70,
     take: [{ price: 'productSalePrice' }],
-    regex: /\[{.*]/g,
-  } 
+    regex: /\[{.*]/g
+  }
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -164,7 +164,7 @@ function JSONize(str) {
   return (
     str
       // wrap keys without quote with valid double quote
-     /*  .replace(/([\$\w]+)\s*:/g, function(_, $1) {
+      /*  .replace(/([\$\w]+)\s*:/g, function(_, $1) {
         return '"' + $1 + '":';
       }) */
       // replacing single quote wrapped ones to double quote
@@ -174,11 +174,11 @@ function JSONize(str) {
       //.replace(/[^\x20-\x7E]/gmi, "")
       //.replace(/(\r\n|\n|\r)/gm,"")
       //.replace(/\s+/g," ")
-      .replace(/[a-zA-z]+[(]?[a-zA-Z]+\([0-9]\)[)]?/g,'""')
-      .replace(/[a-zA-z]+\("[a-z]+"\)/g,'""')
-      .replace(/'"/g,'""')
-      .replace(/"[a-z]+'/g,'""')
-      .replace(/\s[a-z0-9]",/g,'')
+      .replace(/[a-zA-z]+[(]?[a-zA-Z]+\([0-9]\)[)]?/g, '""')
+      .replace(/[a-zA-z]+\("[a-z]+"\)/g, '""')
+      .replace(/'"/g, '""')
+      .replace(/"[a-z]+'/g, '""')
+      .replace(/\s[a-z0-9]",/g, '')
       .trim()
   );
 }
@@ -200,7 +200,8 @@ MetaInspector.prototype.getArray = function() {
           //console.log(JSONize(array));
           //console.log(JSON.parse(JSONize(array)));
           //console.log(JSON.stringify(eval('('+array+')')))
-                  arrayJson1 = JSON.parse(JSONize(array));
+          //arrayJson1 = JSON.parse(JSONize(array));
+          arrayJson1 = JSON.parse(JSONize(array));
           arrayJson = arrayJson1.length >= 1 ? arrayJson1[0] : arrayJson1;
           //console.log(arrayJson.image);
           take.map((val, i) => {
