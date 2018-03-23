@@ -116,12 +116,12 @@ const arrayProdArray = [
     take: [{ image: 'image' }],
     regex: /\[{"sku".*}]/g
   },
-  {
+  /* {
     site: 'www.fastshop.com.br',
     local: 70,
     take: [{ price: 'productSalePrice' }],
     regex: /\[{.*]/sg,
-  }
+  } */
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
