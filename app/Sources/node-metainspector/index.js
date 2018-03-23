@@ -112,9 +112,9 @@ const arrayProdArray = [
   },
   {
     site: 'loja.electrolux.com.br',
-    local: 26,
-    take: [{ image: 'imagem' }, { price: 'RKProductPrice' }],
-    regex: /({(.*?}))/g
+    local: 25,
+    take: [{ image: 'image' }],
+    regex: /\[{"sku".*}]/g
   }
 ];
 
@@ -166,21 +166,23 @@ MetaInspector.prototype.getArray = function() {
           let data = elem.children[0].data;
           data = data.match(regex);
           const [array] = data;
-          arrayJason = JSON.parse(array);
-
+          arrayJson1 = JSON.parse(array);
+          arrayJson = arrayJson1.length >= 1 ? arrayJson1[0] : arrayJson1;
           take.map((val, i) => {
             for (var name in val) {
               var value = val[name];
               switch (name) {
                 case 'title':
-                  this.title = arrayJason[val[name]];
+                  this.title = arrayJson[val[name]];
                 case 'price':
-                  this.price = arrayJason[val[name]];
+                  this.price = arrayJson[val[name]];
+                case 'image':
+                  this.image = arrayJson[val[name]];
               }
             }
           });
 
-          this.arrayProd = JSON.parse(array);
+          this.arrayProd = true;
         }
       });
     }
