@@ -120,7 +120,7 @@ const arrayProdArray = [
     site: 'www.fastshop.com.br',
     local: 70,
     take: [{ price: 'productSalePrice' }],
-    regex: /(\[{.*])/gs
+    regex: /(\[{.*])/s
   }
 ];
 
