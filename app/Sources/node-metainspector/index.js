@@ -116,12 +116,12 @@ const arrayProdArray = [
     take: [{ image: 'image' }],
     regex: /\[{"sku".*}]/g
   },
-  /* {
+   {
     site: 'www.fastshop.com.br',
     local: 70,
     take: [{ price: 'productSalePrice' }],
     regex: /\[{.*]/sg,
-  } */
+  } 
 ];
 
 if (/\bmetainspector\b/.test(process.env.NODE_DEBUG)) {
@@ -191,7 +191,10 @@ MetaInspector.prototype.getArray = function() {
       var value = this.parsedDocument('script').map((i, elem) => {
         if (i === local - 1) {
           let data = elem.children[0].data;
-          //console.log(data);
+          data = String(data);
+          data = data.replace(/\s{2,}/g, '');
+          console.log(data);
+
           data = data.match(regex);
           const [array] = data;
           //console.log(JSONize(array));
